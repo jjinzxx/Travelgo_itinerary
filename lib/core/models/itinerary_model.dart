@@ -89,16 +89,21 @@ class Itinerary {
   }
 }
 
-// 3. 순수한 장소 정보 (Place 테이블 매핑)
+// 3. Place 클래스 (업데이트)
 class Place {
   final int id;
-  final String name; // 화면 표시용 대표 이름
+  final String name;
   final String? nameKr;
   final String? nameEn;
   final String? description;
-  final String? descriptionEn;
-  final String? descriptionKr;
   final String? category;
+  final String? imageUrl;
+  final String? address;
+  final String? address_en;
+  final String? address_kr;
+  final double? lat;
+  final double? lng;
+  final int? regionId;
 
   Place({
     required this.id,
@@ -106,13 +111,17 @@ class Place {
     this.nameKr,
     this.nameEn,
     this.description,
-    this.descriptionEn,
-    this.descriptionKr,
     this.category,
+    this.imageUrl,
+    this.address,
+    this.address_en,
+    this.address_kr,
+    this.lat,
+    this.lng,
+    this.regionId,
   });
 
   factory Place.fromJson(Map<String, dynamic> json) {
-    // 이름 우선순위: 영어 > 한글 > 기본 name > Unknown
     final englishName = json['name_en'] as String?;
     final koreanName = json['name_kr'] as String?;
     final defaultName = json['name'] as String?;
@@ -122,10 +131,14 @@ class Place {
       name: englishName ?? koreanName ?? defaultName ?? 'Unknown Place',
       nameKr: koreanName,
       nameEn: englishName,
-      description: json['description_en'] ?? json['description_kr'] ?? json['description'] ?? 'No description',
-      descriptionEn: json['description_en'],
-      descriptionKr: json['description_kr'],
+      description: json['description_en'] ?? json['description_kr'] ?? json['description'],
       category: json['category'],
+      // DB 컬럼명에 맞춰 수정하세요 (예시)
+      imageUrl: json['place_image_url'],
+      address: json['address_en'] ?? json['address_kr'] ?? json['address'],
+      lat: json['lat'],
+      lng: json['lng'],
+      regionId: json['region_id'],
     );
   }
 }
